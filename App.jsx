@@ -13,17 +13,13 @@ export default function App() {
         const randomMovie = await getRandomMovie();
         setMovie(randomMovie);
         const movieProviders = await getMovieProvider(randomMovie.id);
-        let provs = [];
-        for(const opt in movieProviders){ 
-          if(opt === "message") continue
-          if(movieProviders[opt] === null) continue
 
-           movieProviders[opt].forEach(element => {
-              provs.push(element);
-           });
+        if(Object.hasOwn(movieProviders, "message")) {
+          setProviders([])
+          return
         }
-        console.log(provs);
-  
+
+        let provs = Object.values(movieProviders).filter(opt => opt !== null).flat();
         setProviders(provs);
     }
     loadMovie();
