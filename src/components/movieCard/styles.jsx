@@ -2,10 +2,9 @@ import { StyleSheet } from 'react-native';
 
 const styles = StyleSheet.create({
     container: {
-        marginHorizontal: 24,
         justifyContent: "center",
         position: "relative",
-        gap: 4,
+        gap: 8,
     },
     image: {
         position: "absolute",
@@ -13,7 +12,8 @@ const styles = StyleSheet.create({
         top: 0,
         left: 0,
         bottom: 0,
-        width: "75%",
+        width: "70%",
+        height: 380,
         borderRadius: 20,
     },
     noPoster: {
@@ -39,7 +39,21 @@ const styles = StyleSheet.create({
 
     info: {
         color: "#fff",
-        fontSize: 20,
+        fontSize: 16,
+        fontWeight: "600",
+        width: "100%",
+        justifyContent: "flex-end"
+    },
+    infoLabel: {
+        color: "#b2b2b2",
+        fontSize: 14,
+    },
+
+    infoBox: {
+        alignItems: "left",
+        paddingRight: 14,
+        width: 96,
+        
     }
 })
 

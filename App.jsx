@@ -2,34 +2,47 @@ import { StatusBar } from 'expo-status-bar';
 import { useEffect, useState } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, Image, FlatList} from 'react-native';
 import MovieCard from './src/components/movieCard';
-import { getMovieProvider, getRandomMovie } from './src/services/tmdbServices';
+import { getMovieDetails, getMovieProvider, getRandomMovie } from './src/services/tmdbServices';
+import { formatTime } from './src/utils/formatTime';
+import { formatDate } from './src/utils/formatDate';
 
 export default function App() {
   const [movie, setMovie] = useState(null)
   const [isWatched, setIsWatched] = useState(false)
   const [providers, setProviders] = useState([]);
-
+  const [details, setDetails] = useState({});
   useEffect(() => { 
     async function loadMovie() {
       try{
         const randomMovie = await getRandomMovie();
         setMovie(randomMovie);
+        
+        const movieDetails = await getMovieDetails(randomMovie.id);
+
+        setDetails({
+          release: formatDate(movieDetails['release_date']),
+          duration: formatTime(movieDetails['runtime']),
+          rating: movieDetails['vote_average'],
+        })
+        
         const movieProviders = await getMovieProvider(randomMovie.id);
 
-        if(Object.hasOwn(movieProviders, "message") ) {
-          setProviders([])
+        if(!movieProviders.br) {
+          setProviders([]);
           return
         }
 
-        let provs = Object.values(movieProviders).filter(opt => opt !== null).flat();
+        const provs = Object.values(movieProviders).filter((opt) => typeof opt != "boolean").flatMap(providerArray => providerArray)
+        console.log(provs);
         setProviders(provs);
+
       } catch(error){
           console.error(error)
       }
-       
     }
     loadMovie();
   }, [isWatched])
+
 
   if (!movie) {
     return (
@@ -41,13 +54,16 @@ export default function App() {
   
   return (
     <View style={styles.container}>
-      <MovieCard movie={movie}/>
+      <View style={{paddingHorizontal: 12}}>
+        <MovieCard movie={movie} details={details}/>
+      </View>
       
       <View style={styles.movieDetails}>
-        <Text>{movie.title}</Text>
+        <Text style={styles.movieTitle}>{movie.title}</Text>
+        <Text>Onde assistir?</Text>
         {
           providers.length === 0
-          ? (<Text>Filme não disponível no Brasil</Text>)
+          ? (<Text style={{fontWeight: "bold", fontSize: 22, color: "#b8b7b7"}}>Filme não disponível no Brasil</Text>)
           : (
 
             <View style={{height: 100, width: "100%"}}>
@@ -55,10 +71,12 @@ export default function App() {
               <FlatList
                 data={providers}
                 renderItem={({ item }) => (
-                  <Image
-                    source={{ uri: `https://image.tmdb.org/t/p/original${item}` }}
-                    style={{ borderRadius: 12, height: 80, width: 80}}
-                  />
+                  <View>
+                    <Image
+                      source={{ uri: `https://image.tmdb.org/t/p/original${item['logo_path']}` }}
+                      style={{ borderRadius: 12, height: 80, width: 80}}
+                    />
+                  </View>
                 )}
           
                 style={{
@@ -83,7 +101,6 @@ export default function App() {
           onPress={() => setIsWatched(!isWatched)}
           activeOpacity={0.6}
           style={{
-            elevation: 18,
             backgroundColor: "#444b42ff",
             width: 200,
             alignItems: "center",
@@ -114,18 +131,24 @@ const styles = StyleSheet.create({
     alignItems: "center",
     flex: 1,
   },
+  movieTitle: {
+    fontSize: 28,
+    fontWeight: "600",
+    fontStyle: "italic",
+    textAlign: "center",
+  },  
 
- movieDetails: {
-  borderTopLeftRadius: 50,
-  borderTopRightRadius: 50,
-  width: "100%",
-  padding: 10,
-  flex: 1,
-  backgroundColor: "#fff",
-  alignItems: "center",
-  justifyContent: "space-between", 
-  gap: 24,                      
-},
+  movieDetails: {
+    borderTopLeftRadius: 50,
+    borderTopRightRadius: 50,
+    width: "100%",
+    padding: 10,
+    flex: 1,
+    backgroundColor: "#fff",
+    alignItems: "center",
+    justifyContent: "space-between", 
+    gap: 24,                      
+  },
 
 });
 
