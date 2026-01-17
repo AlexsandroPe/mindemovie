@@ -17,35 +17,26 @@ export async function getRandomMovie() {
 
 export async function getMovieProvider(movieId) {
     try {
-        const res =  await api.get(`movie/${movieId}/watch/providers`);
-        if(!("BR" in res.data.results)) return {message: "No BR available"};
+        const { data } =  await api.get(`movie/${movieId}/watch/providers`);
+        if(!("BR" in data.results)) return {message: "No BR available"};
 
-        const flatrate = res.data.results['BR'].flatrate ? res.data.results['BR'].flatrate.map((pv) => pv['logo_path']) : null;
-        const rent = res.data.results['BR'].rent ? res.data.results['BR'].rent.map((pv) => pv['logo_path']): null;
-        const buy = res.data.results['BR'].buy ? res.data.results['BR'].buy.map((pv) => pv['logo_path']): null;
+        const flatrate = data.results['BR'].flatrate ? data.results['BR'].flatrate.map((pv) => pv['logo_path']) : null;
+        const rent = data.results['BR'].rent ? data.results['BR'].rent.map((pv) => pv['logo_path']): null;
+        const buy = data.results['BR'].buy ? data.results['BR'].buy.map((pv) => pv['logo_path']): null;
         
         return {flatrate, rent, buy};
 
 
     } catch(error) {
-        console.error(error);
+        return error
     }
 }
 
-
-//  if (movieProviders.message) {
-//           console.log(movieProviders.message)
-//           return;
-//         }
-//         console.log(`THE MOVIE IS \n ${randomMovie.title}`)
-//         for(const option in movieProviders) { 
-//           const ret = movieProviders[option].map((item) => {
-//             return {
-//               logoPath: item['logo_path'],
-//               providerName: item['provider_name']
-//             };
-//           })
-//           console.log(option, ret);
-//             // setWatchOptions([...watchOptions, movieProviders[option]])
-//             // console.log(option, movieProviders[option]);
-//         }
+export async function getMovieDetails(movieId) {
+    try {
+        const { data } = await api.get(`movie/${movieId}`);
+        return data;
+    } catch (error) {
+        console.log(error)
+    }
+}
