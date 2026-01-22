@@ -18,12 +18,12 @@ const styles = StyleSheet.create({
     },
     noPoster: {
         position: "absolute",
-        height: 370,
         zIndex: 1,
         top: 0,
         left: 0,
         bottom: 0,
-        width: "75%",
+        width: "70%",
+        height: 380,
         borderRadius: 20,
     },
     title: {

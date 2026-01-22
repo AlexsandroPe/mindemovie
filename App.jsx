@@ -22,7 +22,7 @@ export default function App() {
         setDetails({
           release: formatDate(movieDetails['release_date']),
           duration: formatTime(movieDetails['runtime']),
-          rating: movieDetails['vote_average'],
+          rating: parseFloat(movieDetails['vote_average'].toFixed(2)),
         })
         
         const movieProviders = await getMovieProvider(randomMovie.id);
@@ -133,8 +133,8 @@ const styles = StyleSheet.create({
   },
   movieTitle: {
     fontSize: 28,
-    fontWeight: "600",
-    fontStyle: "italic",
+    paddingHorizontal: 8,
+    fontWeight: "800",
     textAlign: "center",
   },  
 
