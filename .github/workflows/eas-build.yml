@@ -1,0 +1,32 @@
+name: EAS Build (Android APK)
+
+on:
+  workflow_dispatch: # Botão manual na aba Actions
+
+jobs:
+  build:
+    name: Build Android APK
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20.x
+          cache: npm
+
+      - name: Setup EAS
+        uses: expo/expo-github-action@v8
+        with:
+          eas-version: latest
+          token: ${{ secrets.Mindemovie }}
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build APK
+        env:
+          EXPO_PUBLIC_TMDB_TOKEN: ${{ secrets.TMDB_TOKEN }}
+        run: eas build --platform android --profile production --non-interactive
