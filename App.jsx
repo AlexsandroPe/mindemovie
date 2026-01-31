@@ -1,49 +1,12 @@
 import { StatusBar } from 'expo-status-bar';
-import { useEffect, useState } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, Image, FlatList} from 'react-native';
 import MovieCard from './src/components/movieCard';
-import { getMovieDetails, getMovieProvider, getRandomMovie } from './src/services/tmdbServices';
-import { formatTime } from './src/utils/formatTime';
-import { formatDate } from './src/utils/formatDate';
+import { useMovieData } from './src/hooks/useMovieData'
+
 
 export default function App() {
-  const [movie, setMovie] = useState(null)
-  const [isWatched, setIsWatched] = useState(false)
-  const [providers, setProviders] = useState([]);
-  const [details, setDetails] = useState({});
-  useEffect(() => { 
-    async function loadMovie() {
-      try{
-        const randomMovie = await getRandomMovie();
-        setMovie(randomMovie);
-        
-        const movieDetails = await getMovieDetails(randomMovie.id);
-
-        setDetails({
-          release: formatDate(movieDetails['release_date']),
-          duration: formatTime(movieDetails['runtime']),
-          rating: parseFloat(movieDetails['vote_average'].toFixed(2)),
-        })
-        
-        const movieProviders = await getMovieProvider(randomMovie.id);
-
-        if(!movieProviders.br) {
-          setProviders([]);
-          return
-        }
-
-        const provs = Object.values(movieProviders).filter((opt) => typeof opt != "boolean").flatMap(providerArray => providerArray)
-        console.log(provs);
-        setProviders(provs);
-
-      } catch(error){
-          console.error(error)
-      }
-    }
-    loadMovie();
-  }, [isWatched])
-
-
+  const { movie, details, providers, setIsWatched } = useMovieData();
+  
   if (!movie) {
     return (
       <View  style={styles.loading}>
@@ -98,7 +61,7 @@ export default function App() {
         }
 
         <TouchableOpacity
-          onPress={() => setIsWatched(!isWatched)}
+          onPress={() => setIsWatched((isWatched) => !isWatched )}
           activeOpacity={0.6}
           style={{
             backgroundColor: "#444b42ff",
