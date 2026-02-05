@@ -13,7 +13,6 @@ export async function getRandomMovie() {
     }
 }
 
-
 export async function getMovieProvider(movieId) {
     try {
         const { data } =  await api.get(`movie/${movieId}/watch/providers`);
