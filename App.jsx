@@ -5,32 +5,33 @@ import { useMovieData } from './src/hooks/useMovieData'
 
 
 export default function App() {
-  const { movie, details, providers, nextMovie } = useMovieData();
-  
-  if (!movie) {
+  const { error, handleMovie, loading, movieData } = useMovieData();
+
+
+  if(loading) {
     return (
-      <View  style={styles.loading}>
-        <Text>Carregando filme...</Text>
+      <View>
+        <Text>Carregando...</Text>
       </View>
-    );
+    )
   }
-  
+
   return (
     <View style={styles.container}>
       <View style={{paddingHorizontal: 12}}>
-        <MovieCard movie={movie} details={details}/>
+        <MovieCard movie={movieData.movie} details={movieData.details}/>
       </View>
       
       <View style={styles.movieDetails}>
-        <Text style={styles.movieTitle}>{movie.title}</Text>
+        <Text style={styles.movieTitle}>{movieData.movie.title}</Text>
         <Text>Onde assistir?</Text>
         {
-          providers.length === 0
+          movieData.providers.length === 0
           ? (<Text style={{fontWeight: "bold", fontSize: 22, color: "#b8b7b7"}}>Filme não disponível no Brasil</Text>)
           : (
             <View style={{height: 100, width: "100%"}}>
               <FlatList
-                data={providers}
+                data={movieData.providers}
                 renderItem={({ item }) => (
                   <View>
                     <Image
@@ -39,27 +40,16 @@ export default function App() {
                     />
                   </View>
                 )}
-          
-                style={{
-                  width: "100%",
-                }}
-                contentContainerStyle={{ 
-                  paddingHorizontal: 24,
-                  paddingVertical: 20,
-                  alignItems: "center",
-                  gap: 30,
-                }}
+                contentContainerStyle={styles.providersContentContainer}
                 showsHorizontalScrollIndicator={false}
                 horizontal
               />
-            
             </View>
-            
           )
         }
 
         <TouchableOpacity
-          onPress={ nextMovie }
+          onPress={ handleMovie }
           activeOpacity={0.6}
           style={{
             backgroundColor: "#444b42ff",
@@ -84,7 +74,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#1b1a1d',
     paddingTop: 50,
-    gap: 40,
+    gap: 20,
   },
   
   loading: {
@@ -103,13 +93,21 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 50,
     borderTopRightRadius: 50,
     width: "100%",
-    padding: 10,
+    padding: 16,
     flex: 1,
     backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "space-between", 
     gap: 24,                      
   },
+
+  providersContentContainer: {
+    paddingHorizontal: 24,
+    paddingVertical: 20,
+    alignItems: "center",
+    gap: 30,
+  },
+
 
 });
 

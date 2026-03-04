@@ -1,50 +1,42 @@
-import { getMovieDetails, getMovieProvider, getRandomMovie } from '../services/tmdb_services';
-import { formatDate } from '../utils/format_date';
-import { formatTime } from '../utils/format_time';
-import { useEffect, useState } from 'react';
+import { useCallback, useState, useEffect } from 'react';
+import { loadMovie } from '../usecases/loadMovie';
 
 export const useMovieData = () => {
-  const [providers, setProviders] = useState([]);
-  const [details, setDetails] = useState({
-    release: '--',
-    duration: '--',
-    rating: 0,
-  });
-  const [movie, setMovie] = useState(null)
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [movieData, setMovieData] = useState(null);
 
-  const loadMovie = async () => {
-    try{
-      const randomMovie = await getRandomMovie();
-      setMovie(randomMovie);
-      
-      const movieDetails = await getMovieDetails(randomMovie.id);
-      setDetails({
-        release: formatDate(movieDetails['release_date']),
-        duration: formatTime(movieDetails['runtime']),
-        rating: parseFloat(movieDetails['vote_average'].toFixed(2)),
-      })
-      
-      const { flatrate, rent, buy } = await getMovieProvider(randomMovie.id);
-      const provs = [...flatrate, ...rent, ...buy];
-      setProviders(provs);
-    
-    } catch(error){
-      console.error(error)
+  const handleMovie =  useCallback(async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      const movieData = await loadMovie();
+      setMovieData(movieData);
+
+    } catch (error) {
+      console.error(error);
+      setError("Erro ao carregar o filme");
+    } finally {
+      setLoading(false);
     }
-  }
-
-  const nextMovie = () => {
-    loadMovie();
-  }
-
-  useEffect(() => {   
-    loadMovie();
   }, []);
   
+  useEffect(() => {
+    handleMovie();
+  }, [handleMovie]);
+
   return {
-    movie,
-    details,
-    providers,
-    nextMovie
+    error,
+    loading,
+    movieData: {
+      movie:  movieData?.movie,
+      details: {
+        rating:  movieData?.details?.rating,
+        duration:  movieData?.details?.duration,
+        release:  movieData?.details?.release
+      },
+      providers: movieData?.providers,
+    },
+    handleMovie
   }
 }
