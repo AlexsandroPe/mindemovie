@@ -5,32 +5,33 @@ import { useMovieData } from './src/hooks/useMovieData'
 
 
 export default function App() {
-  const { movie, details, providers, nextMovie } = useMovieData();
-  
-  if (!movie) {
+  const { error, handleMovie, loading, movieData } = useMovieData();
+
+
+  if(loading) {
     return (
-      <View  style={styles.loading}>
-        <Text>Carregando filme...</Text>
+      <View>
+        <Text>Carregando...</Text>
       </View>
-    );
+    )
   }
-  
+
   return (
     <View style={styles.container}>
       <View style={{paddingHorizontal: 12}}>
-        <MovieCard movie={movie} details={details}/>
+        <MovieCard movie={movieData.movie} details={movieData.details}/>
       </View>
       
       <View style={styles.movieDetails}>
-        <Text style={styles.movieTitle}>{movie.title}</Text>
+        <Text style={styles.movieTitle}>{movieData.movie.title}</Text>
         <Text>Onde assistir?</Text>
         {
-          providers.length === 0
+          movieData.providers.length === 0
           ? (<Text style={{fontWeight: "bold", fontSize: 22, color: "#b8b7b7"}}>Filme não disponível no Brasil</Text>)
           : (
             <View style={{height: 100, width: "100%"}}>
               <FlatList
-                data={providers}
+                data={movieData.providers}
                 renderItem={({ item }) => (
                   <View>
                     <Image
@@ -48,7 +49,7 @@ export default function App() {
         }
 
         <TouchableOpacity
-          onPress={ nextMovie }
+          onPress={ handleMovie }
           activeOpacity={0.6}
           style={{
             backgroundColor: "#444b42ff",

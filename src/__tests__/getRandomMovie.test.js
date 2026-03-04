@@ -3,6 +3,7 @@ import api from "../services/api";
 jest.mock("../services/api"); 
 
 describe("Random component", () => {
+    
     it("Should return a movie", async  () => {
         const resp = {
             data: {
