@@ -21,8 +21,8 @@ const Styles = StyleSheet.create({
         gap: 14,
     },
     logoIcon: {
-        height: 60,
-        width: 60,
+        height: 80,
+        width: 80,
         borderRadius: 20,
     },
 });
