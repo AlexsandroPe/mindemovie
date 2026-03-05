@@ -1,7 +1,8 @@
-import { View, Text, Image } from 'react-native';
+import { View, Text } from 'react-native';
+import { Image } from "expo-image"
 import NoPoster from '../../assets/no-poster.png'
 import styles from './styles.js'
-import { MovieInfo } from './MovieInfo/index.jsx';
+import { MovieInfo } from './movieInfo/index.jsx';
 import { CalendarDays, Star, Clock} from "lucide-react-native";
 
 export default function MovieCard({movie, details}) {
@@ -15,10 +16,9 @@ export default function MovieCard({movie, details}) {
                     style={movie.poster_path? styles.image : styles.noPoster}   
                     source={
                         movie.poster_path 
-                        ? {uri: `https://image.tmdb.org/t/p/original${movie.poster_path}`} 
+                        ? `https://image.tmdb.org/t/p/original${movie.poster_path}` 
                         : NoPoster
                     } 
-                    resizeMode='cover'
                 />
                 
                 <View style={styles.metaDatas}>
