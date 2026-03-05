@@ -17,8 +17,23 @@ export async function loadMovie() {
 
     const details = detailsResult.status === 'fulfilled' ? detailsResult.value : null;
     const providers = providersResult.status === 'fulfilled' ? providersResult.value : null;
-    const {flatrate, rent, buy} = providers;
 
+    const providersMap = new Map();
+    
+    if(providers) {
+        for(let prov in providers){
+        providers[prov].forEach((item) => {
+            providersMap.set(
+                item['provider_id'],
+                {
+                    id: item['provider_id'].toString(),
+                    logo: item['logo_path']
+                }
+            )   
+        })
+    }
+    }
+    
     return {
         movie,
         details: {
@@ -26,6 +41,6 @@ export async function loadMovie() {
             duration: details?.['runtime'] != null ? formatTime(details['runtime']) : "--",
             release: details?.['release_date'] != null ? formatDate(details['release_date']) : "--",
         },
-        providers: [...flatrate, ...rent, ...buy]
+        providers: [...providersMap.values()]
     }
 }

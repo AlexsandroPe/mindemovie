@@ -1,12 +1,12 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, TouchableOpacity, Image, FlatList} from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import MovieCard from './src/components/movieCard';
 import { useMovieData } from './src/hooks/useMovieData'
+import WatchProviders from './src/components/watchProviders';
 
 
 export default function App() {
-  const { error, handleMovie, loading, movieData } = useMovieData();
-
+  const { handleMovie, loading, movieData } = useMovieData();
 
   if(loading) {
     return (
@@ -18,53 +18,22 @@ export default function App() {
 
   return (
     <View style={styles.container}>
-      <View style={{paddingHorizontal: 12}}>
-        <MovieCard movie={movieData.movie} details={movieData.details}/>
-      </View>
-      
-      <View style={styles.movieDetails}>
-        <Text style={styles.movieTitle}>{movieData.movie.title}</Text>
-        <Text>Onde assistir?</Text>
-        {
-          movieData.providers.length === 0
-          ? (<Text style={{fontWeight: "bold", fontSize: 22, color: "#b8b7b7"}}>Filme não disponível no Brasil</Text>)
-          : (
-            <View style={{height: 100, width: "100%"}}>
-              <FlatList
-                data={movieData.providers}
-                renderItem={({ item }) => (
-                  <View>
-                    <Image
-                      source={{ uri: `https://image.tmdb.org/t/p/original${item['logo_path']}` }}
-                      style={{ borderRadius: 12, height: 80, width: 80}}
-                    />
-                  </View>
-                )}
-                contentContainerStyle={styles.providersContentContainer}
-                showsHorizontalScrollIndicator={false}
-                horizontal
-              />
-            </View>
-          )
-        }
+      <MovieCard details={movieData.details} movie={movieData.movie} />
 
-        <TouchableOpacity
-          onPress={ handleMovie }
-          activeOpacity={0.6}
-          style={{
-            backgroundColor: "#444b42ff",
-            width: 200,
-            alignItems: "center",
-            padding: 20,
-            borderRadius: 14
-          }}
-        >
-          <Text style={{ color: "#fff", fontSize: 22, fontWeight: "600" }}>
-            Já assisti
-          </Text>
-        </TouchableOpacity>
-      </View>
-      
+      <View style={styles.whereToWatch}>
+        <Text style={styles.providersLabel}>Onde assistir?</Text>
+        <WatchProviders providers={movieData.providers} />
+      </View>  
+      <TouchableOpacity
+        onPress={handleMovie}
+        activeOpacity={0.6}
+        style={styles.button}
+      >
+        <Text style={styles.buttonTitle}>
+          Já assisti
+        </Text>
+      </TouchableOpacity>
+
       <StatusBar style="inverted" />
     </View>
   );
@@ -73,41 +42,38 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#1b1a1d',
-    paddingTop: 50,
+    paddingTop: 60,
+    paddingHorizontal: 24,
     gap: 20,
   },
-  
-  loading: {
+
+  whereToWatch: {
+    paddingHorizontal: 15,
+    paddingBottom: 10,
+    gap: 8,
+  },
+
+  providersLabel: {
+    fontSize: 24,
+    fontWeight: "700",
+    color: "#fff"
+  },
+
+  button: {
+    backgroundColor: "#FA8226",
+    width: 306,
+    height: 70,
     justifyContent: "center",
     alignItems: "center",
-    flex: 1,
+    padding: 8,
+    borderRadius: 40,
+    alignSelf: "center",
+    marginTop: 50
   },
-  movieTitle: {
-    fontSize: 28,
-    paddingHorizontal: 8,
-    fontWeight: "800",
-    textAlign: "center",
-  },  
-
-  movieDetails: {
-    borderTopLeftRadius: 50,
-    borderTopRightRadius: 50,
-    width: "100%",
-    padding: 16,
-    flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "space-between", 
-    gap: 24,                      
+  buttonTitle:{ 
+    color: "#fff", 
+    fontSize: 20, 
+    fontWeight: "600" 
   },
-
-  providersContentContainer: {
-    paddingHorizontal: 24,
-    paddingVertical: 20,
-    alignItems: "center",
-    gap: 30,
-  },
-
-
 });
 
