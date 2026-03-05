@@ -5,7 +5,7 @@ import { useMovieData } from './src/hooks/useMovieData'
 
 
 export default function App() {
-  const { error, handleMovie, loading, movieData } = useMovieData();
+  const { handleMovie, loading, movieData } = useMovieData();
 
 
   if(loading) {
@@ -18,11 +18,10 @@ export default function App() {
 
   return (
     <View style={styles.container}>
-      <View style={{paddingHorizontal: 12}}>
-        <MovieCard movie={movieData.movie} details={movieData.details}/>
-      </View>
       
-      <View style={styles.movieDetails}>
+      <MovieCard details={movieData.details} movie={movieData.movie} />
+
+      {/* <View style={styles.movieDetails}>
         <Text style={styles.movieTitle}>{movieData.movie.title}</Text>
         <Text>Onde assistir?</Text>
         {
@@ -63,7 +62,7 @@ export default function App() {
             Já assisti
           </Text>
         </TouchableOpacity>
-      </View>
+      </View> */}
       
       <StatusBar style="inverted" />
     </View>
@@ -73,15 +72,17 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#1b1a1d',
-    paddingTop: 50,
+    paddingTop: 80,
+    paddingHorizontal: 24,
     gap: 20,
   },
   
-  loading: {
-    justifyContent: "center",
-    alignItems: "center",
-    flex: 1,
-  },
+  // loading: {
+  //   justifyContent: "center",
+  //   alignItems: "center",
+  //   flex: 1,
+  // },
+
   movieTitle: {
     fontSize: 28,
     paddingHorizontal: 8,
