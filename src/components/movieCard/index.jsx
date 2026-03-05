@@ -2,7 +2,7 @@ import { View, Text } from 'react-native';
 import { Image } from "expo-image"
 import NoPoster from '../../assets/no-poster.png'
 import styles from './styles.js'
-import { MovieInfo } from './movieInfo/index';
+import { MovieInfo } from './movieInfo/index'
 import { CalendarDays, Star, Clock} from "lucide-react-native";
 
 export default function MovieCard({movie, details}) {
