@@ -24,22 +24,16 @@ export default function App() {
         <Text style={styles.providersLabel}>Onde assistir?</Text>
         <WatchProviders providers={movieData.providers} />
       </View>  
- <TouchableOpacity
-          onPress={ handleMovie }
-          activeOpacity={0.6}
-          style={{
-            backgroundColor: "#444b42ff",
-            width: 200,
-            alignItems: "center",
-            padding: 20,
-            borderRadius: 14
-          }}
-        >
-          <Text style={{ color: "#fff", fontSize: 22, fontWeight: "600" }}>
-            Já assisti
-          </Text>
-        </TouchableOpacity>
-        
+      <TouchableOpacity
+        onPress={handleMovie}
+        activeOpacity={0.6}
+        style={styles.button}
+      >
+        <Text style={styles.buttonTitle}>
+          Já assisti
+        </Text>
+      </TouchableOpacity>
+
       <StatusBar style="inverted" />
     </View>
   );
@@ -48,7 +42,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#1b1a1d',
-    paddingTop: 80,
+    paddingTop: 60,
     paddingHorizontal: 24,
     gap: 20,
   },
@@ -63,6 +57,23 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: "700",
     color: "#fff"
+  },
+
+  button: {
+    backgroundColor: "#FA8226",
+    width: 306,
+    height: 70,
+    justifyContent: "center",
+    alignItems: "center",
+    padding: 8,
+    borderRadius: 40,
+    alignSelf: "center",
+    marginTop: 50
+  },
+  buttonTitle:{ 
+    color: "#fff", 
+    fontSize: 20, 
+    fontWeight: "600" 
   },
 });
 
