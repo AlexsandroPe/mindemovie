@@ -18,11 +18,11 @@ const styles = StyleSheet.create({
     
     image: {
         height: 350,
-        width: 230,
+        width: "60%",
         borderRadius: 16,
     },
     noPoster: {
-        width: 230,
+        width: "60%",
         height: 350,
         borderRadius: 20,
     },
