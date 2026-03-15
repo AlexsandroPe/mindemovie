@@ -6,7 +6,7 @@ import WatchProviders from '../../components/watchProviders';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 
-export default function App() {
+export default function Index() {
   const { handleMovie, loading, movieData } = useMovieData();
 
   if(loading) {
@@ -24,7 +24,8 @@ export default function App() {
       <View style={styles.whereToWatch}>
         <Text style={styles.providersLabel}>Onde assistir?</Text>
         <WatchProviders providers={movieData.providers} />
-      </View>  
+      </View>
+        
       <TouchableOpacity
         onPress={handleMovie}
         activeOpacity={0.6}
@@ -35,7 +36,6 @@ export default function App() {
         </Text>
       </TouchableOpacity>
 
-      <StatusBar style="inverted" />
     </SafeAreaView>
   );
 } 

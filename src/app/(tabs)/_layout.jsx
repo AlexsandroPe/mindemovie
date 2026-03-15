@@ -4,7 +4,7 @@ import { View, StyleSheet } from "react-native";
 
 export default function TabLayout() {
     return (
-        <Tabs screenOptions = {{
+        <Tabs initialRouteName="index" screenOptions = {{
             tabBarStyle: {
                 position: "absolute",
                 bottom: 40,
@@ -31,8 +31,17 @@ export default function TabLayout() {
                     </View>
                 ),
             }} />
+
             <Tabs.Screen name="watched" options={{
-                headerShown: false,
+                headerShown: true,
+                headerTransparent: true,
+                headerTitleAlign: "center",
+                headerTitleStyle: {
+                    color: "#fff",
+                    fontSize: 32
+                },
+                headerTitle: "Assistidos",
+                
                 tabBarIcon: ({ focused }) => (
                     <View style={focused ? styles.iconContainer : null}>
                         <FolderMinus color="#fff" size={30} />
