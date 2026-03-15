@@ -2,6 +2,7 @@
   "expo": {
     "name": "mindemovie",
     "slug": "mindemovie",
+    "scheme": "mindemovieapp",
     "version": "1.1.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -37,6 +38,9 @@
     "updates": {
       "enabled": true,
       "url": "https://u.expo.dev/82fd705f-6f52-4d45-aa61-684e2b084690"
-    }
+    },
+    "plugins": [
+      "expo-router"
+    ]
   }
 }

@@ -1,11 +1,12 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
-import MovieCard from './src/components/movieCard';
-import { useMovieData } from './src/hooks/useMovieData'
-import WatchProviders from './src/components/watchProviders';
+import MovieCard from "../../components/movieCard";
+import { useMovieData } from "../../hooks/useMovieData"
+import WatchProviders from '../../components/watchProviders';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 
-export default function App() {
+export default function Index() {
   const { handleMovie, loading, movieData } = useMovieData();
 
   if(loading) {
@@ -17,13 +18,14 @@ export default function App() {
   }
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView  style={styles.container}>
       <MovieCard details={movieData.details} movie={movieData.movie} />
 
       <View style={styles.whereToWatch}>
         <Text style={styles.providersLabel}>Onde assistir?</Text>
         <WatchProviders providers={movieData.providers} />
-      </View>  
+      </View>
+        
       <TouchableOpacity
         onPress={handleMovie}
         activeOpacity={0.6}
@@ -34,15 +36,13 @@ export default function App() {
         </Text>
       </TouchableOpacity>
 
-      <StatusBar style="inverted" />
-    </View>
+    </SafeAreaView>
   );
 } 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#1b1a1d',
-    paddingTop: 60,
     paddingHorizontal: 24,
     gap: 20,
   },
