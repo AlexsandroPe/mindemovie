@@ -39,4 +39,4 @@ jobs:
         env:
           CI: 1
           EXPO_PUBLIC_TMDB_TOKEN: ${{ secrets.TMDB_TOKEN }}
-        run: eas update --channel production --message "Auto update from GitHub Actions"
+        run: eas update --platform android --channel production --message "Auto update from GitHub Actions"
